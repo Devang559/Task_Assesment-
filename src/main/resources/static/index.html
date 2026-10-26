@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task Manager</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2rem; }
+        input, textarea { width: 300px; margin: 0.25rem 0; }
+        .task { border: 1px solid #ccc; padding: 0.5rem; margin: 0.5rem 0; }
+        .done { text-decoration: line-through; color: gray; }
+    </style>
+</head>
+<body>
+<h1>Tasks</h1>
+<form id="form">
+    <input id="title" placeholder="Title" required><br>
+    <textarea id="description" placeholder="Description"></textarea><br>
+    <label><input type="checkbox" id="completed"> Completed</label><br>
+    <button type="submit">Add Task</button>
+</form>
+<div>
+    <button onclick="load()">All</button>
+    <button onclick="load(true)">Completed</button>
+    <button onclick="load(false)">Pending</button>
+</div>
+<div id="list"></div>
+<script>
+    async function load(completed) {
+        let url = '/api/tasks';
+        if (completed !== undefined) url += '?completed=' + completed;
+        const res = await fetch(url);
+        const tasks = await res.json();
+        document.getElementById('list').innerHTML = tasks.map(t =>
+            `<div class="task ${t.completed ? 'done' : ''}"><strong>${t.title}</strong><br>${t.description || ''}<br>Completed: ${t.completed}</div>`
+        ).join('');
+    }
+    document.getElementById('form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await fetch('/api/tasks', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                title: document.getElementById('title').value,
+                description: document.getElementById('description').value,
+                completed: document.getElementById('completed').checked
+            })
+        });
+        e.target.reset();
+        load();
+    });
+    load();
+</script>
+</body>
+</html>
