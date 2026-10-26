@@ -81,7 +81,28 @@ Base URL: `http://localhost:9090`
 
 Static UI served by Spring Boot at http://localhost:9090/ (index.html). No separate frontend build needed.
 
-## Database
+## Configuration
+
+`src/main/resources/application.properties`:
+```
+spring.application.name=task_assesment
+server.port = 9090
+
+spring.datasource.url=jdbc:h2:mem:task_assesment
+spring.datasource.driverClassName=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+
+# H2 Console Configuration
+spring.h2.console.enabled=true
+spring.h2.console.path=/h2-console
+
+spring.jpa.open-in-view=false
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.generate-ddl=true
+spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+```
 
 Default: in-memory H2 (auto-configured). PostgreSQL schema: `db/schema.sql`.
 
