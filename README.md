@@ -17,65 +17,74 @@ mvnw.cmd spring-boot:run
 
 Server runs on http://localhost:9090. H2 console: http://localhost:9090/h2-console (JDBC URL `jdbc:h2:mem:task_assesment`, user `sa`).
 
-API:
-Base URL: `http://localhost:9090`
+API (base URL: `http://localhost:9090`):
 
-- POST /api/tasks
-  - Description: Create a new task.
-  - Request body (JSON):
-    ```json
-    {
-      "title": "Buy milk",
-      "description": "2 liters",
-      "completed": false
-    }
-    ```
-  - Success response: `201 Created`
-    ```json
-    {
-      "id": 1,
-      "title": "Buy milk",
-      "description": "2 liters",
-      "completed": false
-    }
-    ```
-  - Validation error response: `400 Bad Request`
-    ```json
-    {
-      "timestamp": "2026-01-01T00:00:00Z",
-      "status": 400,
-      "error": "Validation Failed",
-      "errors": {
-        "title": "title is required"
-      }
-    }
-    ```
+1. Create Task
+- Method: POST
+- URL: `http://localhost:9090/api/tasks`
+- Headers: `Content-Type: application/json`
+- Body:
+```json
+{
+  "title": "Buy milk",
+  "description": "2 liters",
+  "completed": false
+}
+```
+- Response `201 Created`:
+```json
+{
+  "id": 1,
+  "title": "Buy milk",
+  "description": "2 liters",
+  "completed": false
+}
+```
 
-- GET /api/tasks
-  - Description: Retrieve all tasks. Optional query param `completed=true|false` to filter by completion status.
-  - Success response: `200 OK`
-    ```json
-    [
-      { "id": 1, "title": "Buy milk", "description": "2 liters", "completed": false }
-    ]
-    ```
+2. Get All Tasks
+- Method: GET
+- URL: `http://localhost:9090/api/tasks`
+- Response `200 OK`:
+```json
+[
+  { "id": 1, "title": "Buy milk", "description": "2 liters", "completed": false }
+]
+```
 
-- GET /api/tasks?completed=true
-  - Description: Retrieve tasks filtered by completion status.
-  - Success response: `200 OK`
-    ```json
-    [
-      { "id": 2, "title": "Done task", "description": "finished", "completed": true }
-    ]
-    ```
+3. Get Tasks By Completion Status
+- Method: GET
+- URL: `http://localhost:9090/api/tasks?completed=true`
+- Response `200 OK`:
+```json
+[
+  { "id": 2, "title": "Done task", "description": "finished", "completed": true }
+]
+```
 
-- GET /api/tasks/{id}
-  - Description: Retrieve a single task by id.
-  - Success response: `200 OK`
-    ```json
-    { "id": 1, "title": "Buy milk", "description": "2 liters", "completed": false }
-    ```
-  - Not found response: `404 Not Found`
+4. Get Task By Id
+- Method: GET
+- URL: `http://localhost:9090/api/tasks/1`
+- Response `200 OK`:
+```json
+{ "id": 1, "title": "Buy milk", "description": "2 liters", "completed": false }
+```
+- Response `404 Not Found` if task does not exist.
+
+5. Validation Error (example)
+- Method: POST
+- URL: `http://localhost:9090/api/tasks`
+- Body: `{}`
+- Response `400 Bad Request`:
+```json
+{
+  "timestamp": "2026-01-01T00:00:00Z",
+  "status": 400,
+  "error": "Validation Failed",
+  "errors": {
+    "title": "title is required"
+  }
+}
+```
 
 ## Frontend
 
